@@ -1,1 +1,1 @@
-# Sonnenerkenung
+# Sonnenerkennung
