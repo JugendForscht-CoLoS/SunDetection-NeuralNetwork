@@ -1,6 +1,7 @@
 """sun_dataset dataset."""
 
 import tensorflow_datasets as tfds
+import os
 
 # TODO(sun_dataset): Markdown description  that will appear on the catalog page.
 _DESCRIPTION = """
@@ -31,8 +32,8 @@ class SunDataset(tfds.core.GeneratorBasedBuilder):
         builder=self,
         description=_DESCRIPTION,
         features=tfds.features.FeaturesDict({
-            "image": tfds.features.Image(),
-            "segmentation_mask": tfds.features.Image(),
+            'image': tfds.features.Image(encoding_format='jpeg'),
+            'segmentation_mask': tfds.features.Image(encoding_format='jpeg'),
         }),
         # If there's a common (input, target) tuple from the
         # features, specify them here. They'll be used if
@@ -42,22 +43,26 @@ class SunDataset(tfds.core.GeneratorBasedBuilder):
         citation=_CITATION,
     )
 
-  def _split_generators(self):
-    dl_manager = tfds.download.DownloadManager(manual_dir="C:/Users/Jonas/Documents/JugendForscht/Sonnenerkennung")
-    data = dl_manager.manual_dir / "suns.zip"
+  def _split_generators(self, dl_manager):
+    #dl_manager = tfds.download.DownloadManager(manual_dir="C:/Users/Jonas/Documents/JugendForscht/Sonnenerkennung")
+    data = dl_manager.manual_dir / 'suns'
+    #data = dl_manager.iter_archive('C:/Users/Jonas/tensorflow_datasets/downloads/manual/suns.zip')
 
     return {
-        'train': self._generate_examples(data / "train"),
-        'test' : self._generate_examples(data / "test"),
+        'train': self._generate_examples(path=data / 'train'),
+        'test' : self._generate_examples(path=data / 'test'),
     }
 
   def _generate_examples(self, path):
-    i = 1
-    temp_img = None
-    for img in path.glob("*.jpeg"):
-        if i%2 != 0: temp_img = img
-        else:
-            yield temp_img.name, {
-                'image': temp_img,
-                'segmentation_mask': img,
-            }
+      i = -1
+      temp_img = None
+      for img in os.listdir(path):
+          if i % 2 != 0:
+              temp_img = img
+          else:
+              name = "Image " + str(int(i/2))
+              yield name, {
+                  'image': path / temp_img,
+                  'segmentation_mask': path / img,
+              }
+          i += 1
