@@ -44,25 +44,21 @@ class SunDataset(tfds.core.GeneratorBasedBuilder):
     )
 
   def _split_generators(self, dl_manager):
-    #dl_manager = tfds.download.DownloadManager(manual_dir="C:/Users/Jonas/Documents/JugendForscht/Sonnenerkennung")
     data = dl_manager.manual_dir / 'suns'
-    #data = dl_manager.iter_archive('C:/Users/Jonas/tensorflow_datasets/downloads/manual/suns.zip')
+    train = data / 'train'
+    test = data / 'test'
 
     return {
-        'train': self._generate_examples(path=data / 'train'),
-        'test' : self._generate_examples(path=data / 'test'),
+        'train': self._generate_examples(img_path=train / 'images', mask_path=train / 'masks'),
+        'test': self._generate_examples(img_path=test / 'images', mask_path=test / 'masks'),
     }
 
-  def _generate_examples(self, path):
-      i = -1
-      temp_img = None
-      for img in os.listdir(path):
-          if i % 2 != 0:
-              temp_img = img
-          else:
-              name = "Image " + str(int(i/2))
-              yield name, {
-                  'image': path / temp_img,
-                  'segmentation_mask': path / img,
-              }
+  def _generate_examples(self, img_path, mask_path):
+      i = 0
+      for img in os.listdir(img_path):
+          name = "Image " + str(i)
           i += 1
+          yield name, {
+              'image': img_path / img,
+              'segmentation_mask': mask_path / img,
+          }
