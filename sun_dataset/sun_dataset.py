@@ -1,4 +1,3 @@
-"""sun_dataset dataset."""
 
 import tensorflow_datasets as tfds
 import os
@@ -20,9 +19,11 @@ class SunDataset(tfds.core.GeneratorBasedBuilder):
   """DatasetBuilder for sun_dataset dataset."""
   MANUAL_DOWNLOAD_INSTRUCTIONS = "None"
 
-  VERSION = tfds.core.Version('1.0.0')
+  VERSION = tfds.core.Version('1.2.3')
   RELEASE_NOTES = {
       '1.0.0': 'Initial release.',
+      '1.2.0': 'New file architecture',
+      '1.2.3': 'More Data'
   }
 
   def _info(self) -> tfds.core.DatasetInfo:
@@ -32,8 +33,8 @@ class SunDataset(tfds.core.GeneratorBasedBuilder):
         builder=self,
         description=_DESCRIPTION,
         features=tfds.features.FeaturesDict({
-            'image': tfds.features.Image(encoding_format='jpeg'),
-            'segmentation_mask': tfds.features.Image(encoding_format='jpeg'),
+            'image': tfds.features.Image(encoding_format='jpeg', shape=(None, None, 3)),
+            'segmentation_mask': tfds.features.Image(encoding_format='jpeg', shape=(None, None, 1)),
         }),
         # If there's a common (input, target) tuple from the
         # features, specify them here. They'll be used if
@@ -61,4 +62,6 @@ class SunDataset(tfds.core.GeneratorBasedBuilder):
           yield name, {
               'image': img_path / img,
               'segmentation_mask': mask_path / img,
+          }
+
           }
