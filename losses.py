@@ -56,3 +56,49 @@ for i in range(0,10):
     print()
 
 #Dice Loss
+def soft_dice_loss(y_true, y_pred, epsilon=1e-6):
+    # skip the batch and class axis for calculating Dice score
+    axes = tuple(range(1, len(y_pred.shape) - 1))
+
+    numerator = 2. * K.sum(y_pred * y_true, axes)
+    denominator = K.sum(K.square(y_pred) + K.square(y_true), axes)
+
+    return 1 - K.mean((numerator + epsilon) / (denominator + epsilon))
+
+print('Soft Dice Loss')
+print(soft_dice_loss(true, pred).numpy())
+print()
+print(soft_dice_loss(inverted_true, inverted_pred).numpy())
+print()
+
+def dice_loss(y_true, y_pred):
+    y_true = tf.cast(y_true, tf.float32)
+    y_pred = tf.math.sigmoid(y_pred)
+    numerator = 2 * tf.reduce_sum(y_true * y_pred)
+    denominator = tf.reduce_sum(y_true + y_pred)
+
+    return 1 - numerator / denominator
+
+print('Dice Loss')
+print(dice_loss(true, pred).numpy())
+print()
+print(dice_loss(inverted_true, inverted_pred).numpy())
+print()
+
+def loss(y_true, y_pred):
+    def dice_loss(y_true, y_pred):
+      y_pred = tf.math.sigmoid(y_pred)
+      numerator = 2 * tf.reduce_sum(y_true * y_pred)
+      denominator = tf.reduce_sum(y_true + y_pred)
+
+      return 1 - numerator / denominator
+
+    y_true = tf.cast(y_true, tf.float32)
+    o = tf.nn.sigmoid_cross_entropy_with_logits(y_true, y_pred) + dice_loss(y_true, y_pred)
+    return tf.reduce_mean(o)
+
+print('Dice Loss and Crossentropy')
+print(loss(true, pred).numpy())
+print()
+print(loss(inverted_true, inverted_pred).numpy())
+print()
