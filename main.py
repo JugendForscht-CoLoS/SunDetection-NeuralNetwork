@@ -157,4 +157,4 @@ plt.legend()
 plt.show()
 
 show_predictions(test, 6)
-model.save('neuronalnet/sun_detection.h5')
+model.save_weights('saved_weights')
