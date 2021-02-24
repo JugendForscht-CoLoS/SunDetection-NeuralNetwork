@@ -14,7 +14,7 @@ model = getModel()
 model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0005),
               loss=TverskyLoss(alpha=0.9835, smooth=2e4),
               metrics=['acc'])
-model.load_weights('neuronalnet/saved_weights)
+model.load_weights('neuronalnet/saved_weights')
 
 mlModel = ct.convert(model)
 mlModel.author = author
