@@ -108,4 +108,4 @@ plt.legend()
 plt.show()
 
 show_predictions(test, 6)
-model.save_weights('neuronalnet/saved_weights')
+model.save_weights('neuralnet/saved_weights')
