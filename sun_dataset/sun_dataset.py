@@ -43,7 +43,7 @@ class SunDataset(tfds.core.GeneratorBasedBuilder):
         homepage='https://dataset-homepage/',
         citation=_CITATION,
     )
-
+  #unterteilt die geladenen Bilder in train und test
   def _split_generators(self, dl_manager):
     data = dl_manager.manual_dir / 'suns'
     train = data / 'train'
@@ -53,7 +53,8 @@ class SunDataset(tfds.core.GeneratorBasedBuilder):
         'train': self._generate_examples(img_path=train / 'images', mask_path=train / 'masks'),
         'test': self._generate_examples(img_path=test / 'images', mask_path=test / 'masks'),
     }
-
+  
+  #lädt die einzelnen Bilder und dazugehörigen Masken
   def _generate_examples(self, img_path, mask_path):
       i = 0
       for img in os.listdir(img_path):
