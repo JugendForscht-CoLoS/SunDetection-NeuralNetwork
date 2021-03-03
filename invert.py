@@ -19,7 +19,7 @@ rounded = tf.math.round(rand)
 #invertieren: 1er-Matrix subtrahiert von der Bild-Matrix
 inverted = tf.math.subtract(ones, rounded)
 
-# Bild ausgeben
+# Bilder ausgeben
 plt.figure(figsize=(15, 15))
 display_list = [rand, rounded, inverted]
 title = ['Random', 'Rounded', 'Inverted']
