@@ -5,6 +5,9 @@ OUTPUT_CHANNELS = 1
 ACTIVATION='relu'
 PICTURE_SIZE=224
 
+#Wir benutzen immer Convolutional Layers und Max Pooling Layers abwechselt
+#Beim Upsampling drehen wir das um: Upsampling 2D und Convolutional Transpose Layers
+
 inputs = Input(shape=(PICTURE_SIZE, PICTURE_SIZE, 3))
 def downsample(input, filters=8, third_conv=False, padding='valid'):
   model = Conv2D(filters=filters, kernel_size=[3,3], activation=ACTIVATION, padding=padding)(input)
@@ -30,12 +33,15 @@ def upsample2(input, filters):
   return model
 
 def getModel():
+    #Downsampling
     output0 = downsample(inputs, padding='same')
     output1 = downsample(output0, filters=16, padding='same')
     output2 = downsample(output1, filters=32, third_conv=True, padding='same')
     output3 = downsample(output2, filters=64, padding='same')
     model = downsample(output3, filters=128, third_conv=True, padding='same')
-
+  
+    #Upsampling
+    #Um eine genauere Auflösung zu gewähren verknüpfen wir Max Pooling Upsampling 2D Layers
     model = upsample(model, filters=72) 
     model = Add()([model, output3])
     model = upsample(model, filters=44)
@@ -45,7 +51,9 @@ def getModel():
     model = upsample(model, filters=16) 
     model = Add()([model, output0])
     model = upsample(model, filters= 12)
-
+    
+    #Als filters geben wir OUTPUT_CHANNELS (=1) an. So können wir gewährleisten, dass das neuronale Netz nur zwischen
+    #Pixel der Sonne und des Hintergrund unterscheiden kann
     output = Conv2DTranspose(filters=OUTPUT_CHANNELS, kernel_size=[1,1], activation='sigmoid', padding='same')(model)
 
     model = Model(inputs, output)
