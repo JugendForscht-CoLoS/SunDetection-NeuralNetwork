@@ -1,6 +1,6 @@
 import sun_dataset.sun_dataset
 from losses.losses import TverskyLoss
-from model.model import getModel
+from model.unet import getModel
 
 import tensorflow_datasets as tfds
 import tensorflow as tf
