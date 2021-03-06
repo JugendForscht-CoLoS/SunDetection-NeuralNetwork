@@ -36,13 +36,13 @@ def getModel():
     output3 = downsample(output2, filters=64, padding='same')
     output4 = downsample(output3, filters=128, third_conv=True, padding='same')
 
-    model = Conv2D(filters=200, kernel_size=[3,3], activation=ACTIVATION)(model)  
-    model = Conv2D(filters=210, kernel_size=[3,3], activation=ACTIVATION)(model) 
-    model = Conv2D(filters=220, kernel_size=[3,3], activation=ACTIVATION)(model) 
+    #model = Conv2D(filters=200, kernel_size=[3,3], activation=ACTIVATION)(model)  
+    #model = Conv2D(filters=210, kernel_size=[3,3], activation=ACTIVATION)(model) 
+    #model = Conv2D(filters=220, kernel_size=[3,3], activation=ACTIVATION)(model) 
 
-    model = Conv2DTranspose(filters=220, kernel_size=[3,3], activation=ACTIVATION)(model)  
-    model = Conv2DTranspose(filters=210, kernel_size=[3,3], activation=ACTIVATION)(model) 
-    model = Conv2DTranspose(filters=200, kernel_size=[3,3], activation=ACTIVATION)(model) 
+    #model = Conv2DTranspose(filters=220, kernel_size=[3,3], activation=ACTIVATION)(model)  
+    #model = Conv2DTranspose(filters=210, kernel_size=[3,3], activation=ACTIVATION)(model) 
+    #model = Conv2DTranspose(filters=200, kernel_size=[3,3], activation=ACTIVATION)(model) 
 
     model = upsample(model, filters=72) 
     model = Add()([model, output3])
