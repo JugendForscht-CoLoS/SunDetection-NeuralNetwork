@@ -34,7 +34,7 @@ def getModel():
     output1 = downsample(output0, filters=16, padding='same')
     output2 = downsample(output1, filters=32, third_conv=True, padding='same')
     output3 = downsample(output2, filters=64, padding='same')
-    output4 = downsample(output3, filters=128, third_conv=True, padding='same')
+    model = downsample(output3, filters=128, third_conv=True, padding='same')
 
     model = upsample(model, filters=72) 
     model = Add()([model, output3])
